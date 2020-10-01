@@ -1,6 +1,6 @@
 <template>
         <div class="controlBoard">
-            "control board"
+            <button v-on:click="connect">Connect</button>
         </div>
 </template>
 
@@ -8,7 +8,12 @@
 export default {
     name:"ControlBoard",
     props:['source'],
-    data:{}
+    data:{},
+    methods:{
+        connect:function(){
+            this.$emit('connect',this.source.id)
+        }
+    }
 }
 </script>
 

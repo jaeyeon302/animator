@@ -1,5 +1,5 @@
 <template>
-    <li class="animation-screen" :style="[position]">
+    <li class="animation-screen" :id="'screen-'+source.id" :style="[position]">
         <viewer
             v-bind:style="{
                 gridColumnStart:1,
@@ -18,6 +18,7 @@
                 gridRowEnd:3,
             }"
             v-bind:source="source"
+            @connect="connect"
         />
     </li>
 </template>
@@ -43,22 +44,24 @@ export default {
                 transform: 'rotate('+this.source.rotateAngle+'deg) translate('+this.source.rotateRadius+') rotate('+this.source.rotateReverseAngle+'deg)'
             }
         }
-    }
+    },
+    methods:{
+        connect:function(messageFromChild){
+            this.$emit('connect',messageFromChild)
+        }
+    },
 }
 </script>
 
 <style lang="scss" scoped>
 .animation-screen{
     position:absolute;
-    -webkit-transition: all 0.4s ease-in-out;
-    -moz-transition: all 0.4s ease-in-out;
-    transition: all 0.4s ease-in-out;
 
     display:grid;
     grid-template-columns: repeat(3,1fr);
     grid-template-rows: 4fr 1fr;
 
-    width:200px;
-    height:200px;
+    width:250px;
+    height:250px;
 }
 </style>

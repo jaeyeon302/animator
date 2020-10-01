@@ -10,10 +10,21 @@
                     v-for="film in animations"
                     v-bind:key="film.id"
                     v-bind:source="film"
+                    @connect="connect"
                 >
                 </screen>
             </ul>
+               <arrow
+                    v-for="(value,key) in connections"
+                    v-bind:key="key"
+                    v-bind:from="value.from"
+                    v-bind:to="value.to"
+                    @disconnect="disconnect"
+                    @showTransitionCondition="showTransitionCondition"
+                >
+                </arrow>
         </div>
+        <arrowModal v-if="showModal" @close="getTransitionCondition"></arrowModal>
     </div>
 </template>
 
@@ -21,16 +32,26 @@
 
 <script>
 import screen from './AnimationScreen'
+import arrow from './Arrow'
+import arrowModal from './ArrowModal'
+
+
 
 export default {
     name:'AnimationContainer',
     components:{
-        screen
+        screen,
+        arrow,
+        arrowModal
     },
     data(){
-        var animations = []
         return{
-            animations:animations
+            animations:[],
+            connections:{},
+            connectionState: false,
+            connectionReadyScreenNumber: null,
+            transitionCondition:{},
+            showModal:false,
         }
     },
     computed:{
@@ -63,8 +84,9 @@ export default {
                 filename:"./src/assets/Samba Dancing.fbx",
                 rotateRadius: this.calculateRadius(this.animations.length+1), // becuase item will be pushed
                 rotateAngle: this.calculateAngle(this.animations.length-1, this.animations.length),
-                rotateReverseAngle: -1*this.calculateAngle(this.animations.length-1, this.animations.length)
+                rotateReverseAngle: -1*this.calculateAngle(this.animations.length-1, this.animations.length),
             })
+
 
             //re calculate tpositions of screen items
             for(let i=0; i<this.animations.length; i++){
@@ -77,6 +99,7 @@ export default {
         },
         popScreen:function(){
             const val = this.animations.pop()
+            const deletedId = val.id
             //re calculate positions of screen items
             for(let i=0; i<this.animations.length; i++){
                 const a = this.calculateAngle(i,this.animations.length)
@@ -84,7 +107,50 @@ export default {
                 this.animations[i].rotateAngle = a
                 this.animations[i].rotateReverseAngle = -1*a
             }
+            for (const key in this.connections) {
+                let start = Number(key.split("-")[0])
+                let end = Number(key.split("-")[1])
+                if(start === Number(deletedId) || end === Number(deletedId)){
+                    this.$delete(this.connections, key)
+                }
+            }
             return val
+        },
+        connect:function(messageFromChild){
+            let screenIdNumber = messageFromChild
+            if(!this.connectionState){
+                this.connectionReadyScreenNumber = screenIdNumber
+                this.connectionState = true
+                this.showModal = true
+            }else if(this.connectionReadyScreenNumber < this.animations.length){
+                let from = this.connectionReadyScreenNumber
+                let to = screenIdNumber
+                
+                //draw arrow
+                this.$set(this.connections, from+"-"+to, {from:from, to:to, transition:this.transitionCondition})
+                console.log(this.connections)
+                this.connectionState = false
+                this.connectionReadyScreenNumber = null
+                this.showModal = false
+                
+            }else{
+                // what if user delete last node after select it as connectionNode
+                this.connectionState = false
+                this.connectionReadyScreenNumber = null 
+            }
+        },
+        disconnect:function(messageFromChild){
+            let key = messageFromChild[0]+"-"+messageFromChild[1]
+            this.$delete(this.connections, key)
+        },
+        getTransitionCondition:function(messageFromChild){
+            this.transitionCondition = messageFromChild
+            this.showModal = false
+        },
+        showTransitionCondition:function(messageFromChild){
+            let key = messageFromChild[0]+"-"+messageFromChild[1]
+            let condition = connections[key].transition
+
         }
     }
 
@@ -99,9 +165,7 @@ export default {
     ul{
         list-style-type: none;
         margin:0;
-        -webkit-transition: all 0.4s ease-in-out;
-        -moz-transition: all 0.4s ease-in-out;
-        transition: all 0.4s ease-in-out;
+
     }
     display: grid;
     grid-template-columns: repeat(3,1fr);
