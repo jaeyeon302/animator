@@ -1,19 +1,39 @@
 <template>
     <li class="animation-screen" :style="[position]">
-        <div class="viewer">
-            {{source.id}}
-        </div>
-        <div class="control-board">
-            "hi"
-        </div>
+        <viewer
+            v-bind:style="{
+                gridColumnStart:1,
+                gridColumnEnd:4,
+                gridRowStart:1,
+                gridRowEnd:2,
+            }"
+            v-bind:screenId="source.id"
+            v-bind:filename="source.filename"
+        />
+        <controlBoard
+            v-bind:style="{
+                gridColumnStart:1,
+                gridColumnEnd:4,
+                gridRowStart:2,
+                gridRowEnd:3,
+            }"
+            v-bind:source="source"
+        />
     </li>
 </template>
 
 
 <script>
+import viewer from "./AnimationScreenView"
+import controlBoard from "./AnimationScreenControlBoard"
+
 export default {
     name:"AnimationScreen",
     props:["source"], //data from AnimationContainer
+    components:{
+        viewer,
+        controlBoard
+    },
     data:{
 
     },
@@ -37,25 +57,8 @@ export default {
     display:grid;
     grid-template-columns: repeat(3,1fr);
     grid-template-rows: 4fr 1fr;
-    
-    border-radius: 10px;
+
     width:200px;
     height:200px;
-    .viewer{
-        background-color:red;
-        grid-column-start: 1;
-        grid-column-end:4;
-        grid-row-start: 1;
-        grid-row-end:2;
-        border-radius: 10px 10px 0px 0px;
-    }
-    .control-board{
-        background-color: blue;
-        grid-column-start: 1;
-        grid-column-end: 4;
-        grid-row-start:2;
-        grid-row-end:3;
-        border-radius:0px 0px 10px 10px;
-    }
 }
 </style>

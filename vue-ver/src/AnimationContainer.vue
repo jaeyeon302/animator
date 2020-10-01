@@ -60,7 +60,7 @@ export default {
             //add screen
             this.animations.push({
                 id:this.animations.length,
-                animationName:"default not set",
+                filename:"./src/assets/Samba Dancing.fbx",
                 rotateRadius: this.calculateRadius(this.animations.length+1), // becuase item will be pushed
                 rotateAngle: this.calculateAngle(this.animations.length-1, this.animations.length),
                 rotateReverseAngle: -1*this.calculateAngle(this.animations.length-1, this.animations.length)

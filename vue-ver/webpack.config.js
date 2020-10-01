@@ -95,7 +95,11 @@ if (process.env.NODE_ENV === 'production') {
         NODE_ENV: '"production"'
       }
     }),
-    new webpack.optimize.UglifyJsPlugin({
+    
+    // 빌드시 발생하는 아래 문제에 대하여
+    //Unexpected token name «i», expected punc «;» 
+    //UglifyJsPlugin -> MinChunkSizePlugin으로 바꾸니 해결
+    new webpack.optimize.MinChunkSizePlugin({
       sourceMap: true,
       compress: {
         warnings: false
