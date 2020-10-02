@@ -13,16 +13,20 @@
                 <div class="modal-body">
                     <slot name="body">
                         <form>
-                        <label for="f-dir"><bold>Force direction :</bold></label>
-                        <select id="f-dir" name="f-dir" ref="forceDirection">
-                            <option value="cw">clockwise</option>
-                            <option value="ccw">counter-clockwise</option>
-                        </select>
-                        <label for="f-type"><bold>Force type :</bold></label>
-                        <select id="f-type" name="f-type" ref="forceType">
-                            <option value="touch">touch</option>
-                            <option value="push">push</option>
-                        </select>
+                          <div class="option">
+                            <label for="f-dir">Force direction :</label>
+                            <select id="f-dir" name="f-dir" ref="forceDirection">
+                                <option value="cw">clockwise</option>
+                                <option value="ccw">counter-clockwise</option>
+                            </select>
+                          </div>
+                          <div class="option">
+                            <label for="f-type">Force type :</label>
+                            <select id="f-type" name="f-type" ref="forceType">
+                                <option value="touch">touch</option>
+                                <option value="push">push</option>
+                            </select>
+                          </div>
                         </form>
                     </slot>
                 </div>
@@ -88,10 +92,15 @@ export default {
 
 .modal-body {
   margin: 20px 0;
+  .option{
+    margin: 0.5em;
+  }
 }
 
 .modal-default-button {
-  float: right;
+  margin-left: auto;
+  margin-right:auto;
+  display: block;
 }
 
 /*

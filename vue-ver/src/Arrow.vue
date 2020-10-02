@@ -1,11 +1,24 @@
 <template>
-    <connection  :from="'#screen-'+from" :to="'#screen-'+to" color="red" tail :width="3">
-        <div class="line" v-on:click="disconnect" v-on:mouseover="showTransitionCondition"></div>
+    <connection  :from="'#screen-'+from" :to="'#screen-'+to" color="red" tail :width="5">
+        <div class="line" 
+        v-on:click="disconnect" 
+        >
+          <div class="description">
+            <div 
+              v-for="(value,key) in transitionCondition"
+              v-bind:key="key"
+            >
+            {{key}} : {{value}}
+            </div>
+          </div>
+        </div>
     </connection>
 </template>
 
 <script>
 import * as Arrow from './domarrow'
+import Vue from 'vue'
+
 
 export default {
     name:"Arrow",
@@ -17,6 +30,9 @@ export default {
         to:{
             type:Number,
             required:true
+        },
+        transitionCondition:{
+            type:Object
         }
     },
     methods:{
@@ -37,8 +53,24 @@ export default {
 </script>
 
 <style lang="scss">
+.line:hover .description{
+  display: block;
+}
 connection{
     .line{
+        .description{
+          background-color: rgba($color: #000000, $alpha: 0.8);
+          width: 50%;
+          color: white;
+          border-radius: 5px;
+          margin-top:10px;
+          margin-left: auto;
+          margin-right: auto;
+          padding: 0.5em;
+          display: none;
+        }
+
+
         cursor:pointer;
         position:absolute;
         height:20px;
@@ -69,4 +101,5 @@ connection{
         }
     }
 }
+
 </style>

@@ -19,8 +19,8 @@
                     v-bind:key="key"
                     v-bind:from="value.from"
                     v-bind:to="value.to"
+                    v-bind:transitionCondition="value.transitionCondition"
                     @disconnect="disconnect"
-                    @showTransitionCondition="showTransitionCondition"
                 >
                 </arrow>
         </div>
@@ -127,10 +127,11 @@ export default {
                 let to = screenIdNumber
                 
                 //draw arrow
-                this.$set(this.connections, from+"-"+to, {from:from, to:to, transition:this.transitionCondition})
+                this.$set(this.connections, from+"-"+to, {from:from, to:to, transitionCondition:this.transitionCondition})
                 console.log(this.connections)
                 this.connectionState = false
                 this.connectionReadyScreenNumber = null
+                this.transitionCondition = null
                 this.showModal = false
                 
             }else{
@@ -147,11 +148,6 @@ export default {
             this.transitionCondition = messageFromChild
             this.showModal = false
         },
-        showTransitionCondition:function(messageFromChild){
-            let key = messageFromChild[0]+"-"+messageFromChild[1]
-            let condition = connections[key].transition
-
-        }
     }
 
 
