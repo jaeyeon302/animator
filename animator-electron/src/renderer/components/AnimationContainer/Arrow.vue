@@ -1,5 +1,5 @@
 <template>
-    <connection  :from="'#screen-'+from" :to="'#screen-'+to" color="red" tail :width="5">
+    <connection  :from="'#screen-'+from" :to="'#screen-'+to" color="red" tail :width="3">
         <div class="line" 
         v-on:click="disconnect" 
         >
@@ -17,8 +17,6 @@
 
 <script>
 import * as Arrow from './domarrow'
-import Vue from 'vue'
-
 
 export default {
     name:"Arrow",
@@ -75,7 +73,7 @@ connection{
         position:absolute;
         height:20px;
         border-color: purple;
-        background-color: black;
+        background-color: red;
         .arrow{
             top: -5px;
             height: 0px;

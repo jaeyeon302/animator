@@ -25,8 +25,8 @@
 
 
 <script>
-import viewer from "./AnimationScreenView"
-import controlBoard from "./AnimationScreenControlBoard"
+import viewer from "./AnimationScreen/AnimationScreenView"
+import controlBoard from "./AnimationScreen/AnimationScreenControlBoard"
 
 export default {
     name:"AnimationScreen",
@@ -48,7 +48,7 @@ export default {
     methods:{
         connect:function(messageFromChild){
             this.$emit('connect',messageFromChild)
-        }
+        },
     },
 }
 </script>

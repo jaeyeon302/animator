@@ -31,10 +31,11 @@
 
 
 <script>
-import screen from './AnimationScreen'
-import arrow from './Arrow'
-import arrowModal from './ArrowModal'
-
+import screen from './AnimationContainer/AnimationScreen'
+import arrow from './AnimationContainer/Arrow'
+import arrowModal from './AnimationContainer/ArrowModal'
+const {dialog} = require('electron').remote
+console.log(dialog)
 
 
 export default {
@@ -60,7 +61,7 @@ export default {
             const height = this.calculateRadius(this.animations.length, 2)
             return{
                 marginTop: distance,
-                marginLeft: distance,
+                marginLeft: '50T',
                 width:height,
                 height:height,
             }
@@ -78,23 +79,35 @@ export default {
         },
 
         pushScreen:function(){
-            //add screen
-            this.animations.push({
-                id:this.animations.length,
-                filename:"./src/assets/Samba Dancing.fbx",
-                rotateRadius: this.calculateRadius(this.animations.length+1), // becuase item will be pushed
-                rotateAngle: this.calculateAngle(this.animations.length-1, this.animations.length),
-                rotateReverseAngle: -1*this.calculateAngle(this.animations.length-1, this.animations.length),
-            })
+            const filename = dialog.showOpenDialog({
+                properties: ['openFile'],
+                filters:[
+                    {name: 'fbx', extensions: ['fbx']},
+                    {name:'All Files', extensions: ['*']}
+                ]
+  
+            })[0]
+
+            if(filename.endsWith('fbx')){
+                //add screen
+                this.animations.push({
+                    id:this.animations.length,
+                    filename:filename,//"./src/renderer/assets/Samba Dancing.fbx",
+                    rotateRadius: this.calculateRadius(this.animations.length+1), // becuase item will be pushed
+                    rotateAngle: this.calculateAngle(this.animations.length-1, this.animations.length),
+                    rotateReverseAngle: -1*this.calculateAngle(this.animations.length-1, this.animations.length),
+                })
 
 
-            //re calculate tpositions of screen items
-            for(let i=0; i<this.animations.length; i++){
-                const a = this.calculateAngle(i,this.animations.length)
-                this.animations[i].rotateRadius = this.calculateRadius(this.animations.length)
-                this.animations[i].rotateAngle = a
-                this.animations[i].rotateReverseAngle = -1*a
+                //re calculate tpositions of screen items
+                for(let i=0; i<this.animations.length; i++){
+                    const a = this.calculateAngle(i,this.animations.length)
+                    this.animations[i].rotateRadius = this.calculateRadius(this.animations.length)
+                    this.animations[i].rotateAngle = a
+                    this.animations[i].rotateReverseAngle = -1*a
+                }
             }
+            
             return this.animations.length
         },
         popScreen:function(){
@@ -147,7 +160,7 @@ export default {
         getTransitionCondition:function(messageFromChild){
             this.transitionCondition = messageFromChild
             this.showModal = false
-        },
+        }
     }
 
 
@@ -174,8 +187,8 @@ export default {
         grid-row-end:2;
     }
     .storyboard{
-        grid-column-start: 1;
-        grid-column-end: 4;
+        grid-column-start: 2;
+        grid-column-end: 3;
         grid-row-start: 2;
         grid-row-end: 3;
     }
