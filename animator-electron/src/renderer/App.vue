@@ -20,8 +20,9 @@
 </template>
 
 <script>
-import AnimationContainer from './components/AnimationContainer'
-export default {
+  import AnimationContainer from '@/components/AnimationContainer'
+
+  export default {
   name: 'app',
   components:{
     AnimationContainer
@@ -31,7 +32,7 @@ export default {
       msg: 'Animator : FBX storyboard to create robot animation'
     }
   }
-}
+  }
 </script>
 
 <style lang="scss" scoped>
